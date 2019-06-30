@@ -1,10 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLineEdit, QLabel, QDesktopWidget, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLineEdit, QLabel, QDesktopWidget, QPushButton, QWidget
 from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QCoreApplication
+from database.modules import query
 
 
-class Main(QMainWindow):
+class Main(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -25,11 +26,6 @@ class Main(QMainWindow):
 
         # Center on screen
         resolution = QDesktopWidget().screenGeometry()
-
-        """
-         Show Mainwindow in the middle of screen 
-        
-        """
         self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
                   (resolution.height() / 2) - (self.frameSize().height() / 2))
 
@@ -54,11 +50,10 @@ class Main(QMainWindow):
 
     @pyqtSlot()
     def on_click(self):
-        pass
-
-
-
-
+        if query(self.id.text()):
+            raise ValueError
+        else:
+            return True
 
 
 # Debugging
