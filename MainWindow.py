@@ -1,63 +1,79 @@
-import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLineEdit, QLabel, QDesktopWidget, QPushButton, QWidget
-from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtSlot, QCoreApplication
+# -*- coding: utf-8 -*-
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from Register import RegisterUi
 from database.modules import query
 
+class Ui_MainWindow(object):
 
-class Main(QWidget):
+    def openWindow(self):
+        self.button = QtWidgets.QPushButton()
+        self.var = self.lineEdit.text()
+        self.window = QtWidgets.QMainWindow()
+        self.ui = RegisterUi()
+        self.ui.setupUi(self.window, self.var)
+        # MainWindow.hide()
+        self.window.show()
 
-    def __init__(self):
-        super().__init__()
-        self.id = QLineEdit(self)
-        self.label = QLabel(self)
-        self.button = QPushButton(self)
-        self.title = "Hastane Randevu Sistemi"
-        self.width = 200
-        self.height = 600
-        self.top = 480
-        self.left = 600
-        self.initui()
-
-    # Initiliaze Ui
-    def initui(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.height, self.width)
-
-        # Center on screen
-        resolution = QDesktopWidget().screenGeometry()
-        self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
-                  (resolution.height() / 2) - (self.frameSize().height() / 2))
-
-        # Create "TC" Textbox
-        self.id.move(140, 70)
-        self.id.resize(280, 40)
-
-        # Create "TC" Label
-        newfont = QtGui.QFont("Times", 15) # Font size and font change
-        self.label.setFont(newfont)
-        self.label.setText("TC")
-        self.label.move(100, 70)
-        self.label.resize(40, 40)
-
-        # Create Button
-        self.button.move(430, 70)
-        self.button.resize(70,40)
-        self.button.setFont(newfont)
-        self.button.setText("Gönder")
-        self.button.clicked.connect(self.on_click)
-        self.show()
-
-    @pyqtSlot()
+    # @QtCore.pyqtSlot()
     def on_click(self):
-        if query(self.id.text()):
-            raise ValueError
+        if query(self.lineEdit.text()):
+            pass
         else:
-            return True
+            self.openWindow()
+
+    def id_return(self):
+        pass
 
 
-# Debugging
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    Main = Main()
-    sys.exit(app.exec())
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(456, 80)
+
+        # Center on Screen
+        resolution = QtWidgets.QDesktopWidget().screenGeometry()
+        MainWindow.move((resolution.width() / 2) - (MainWindow.frameSize().width() / 2),
+                  (resolution.height() / 2) - (MainWindow.frameSize().height() / 2))
+
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(290, 30, 80, 23))
+        self.pushButton.setObjectName("pushButton")
+
+        # self.pushButton.clicked.connect(self.on_click)
+        self.pushButton.clicked.connect(self.on_click)
+
+
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(90, 24, 59, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(120, 30, 161, 23))
+        self.lineEdit.setObjectName("lineEdit")
+        MainWindow.setCentralWidget(self.centralwidget)
+
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.pushButton.setText(_translate("MainWindow", "Gönder"))
+        self.label.setText(_translate("MainWindow", "TC"))
+
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+
