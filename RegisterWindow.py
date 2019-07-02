@@ -33,9 +33,8 @@ class Register(QWidget):
         self.mydb = database()
         self.mycursor = self.mydb.cursor()
 
-    def initui(self,OtherWindow):
-        OtherWindow.setObjectName("OtherWindow")
-        OtherWindow.resize(568, 109)
+    def initui(self, RegisterWindow):
+        RegisterWindow.setObjectName("MainWindow")
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.height, self.width)
 
@@ -86,8 +85,7 @@ class Register(QWidget):
 
         # connect button to function on_click
         self.button.clicked.connect(self.on_click)
-        # self.show()
-        QMetaObject.connectSlotsByName(OtherWindow)
+        #self.show()
 
     @pyqtSlot()
     def on_click(self):
@@ -107,6 +105,5 @@ class Register(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    print(__name__)
     ex = Register()
     sys.exit(app.exec_())

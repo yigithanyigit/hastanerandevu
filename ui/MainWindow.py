@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.OtherWindow import Ui_OtherWindow
+from database.modules import query
 
 class Ui_MainWindow(object):
 
@@ -18,6 +19,17 @@ class Ui_MainWindow(object):
         MainWindow.hide()
         self.window.show()
 
+    def on_click(self):
+        if query(self.lineEdit.text()):
+            pass
+        else:
+            self.var = self.lineEdit.text()
+            self.openWindow()
+
+    def id_return(self):
+        pass
+
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(456, 80)
@@ -27,7 +39,9 @@ class Ui_MainWindow(object):
         self.pushButton.setGeometry(QtCore.QRect(290, 30, 80, 23))
         self.pushButton.setObjectName("pushButton")
 
-        self.pushButton.clicked.connect(self.openWindow)
+        # self.pushButton.clicked.connect(self.openWindow)
+        self.pushButton.clicked.connect(self.on_click)
+
 
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(90, 24, 59, 31))
@@ -40,6 +54,7 @@ class Ui_MainWindow(object):
         self.lineEdit.setObjectName("lineEdit")
         MainWindow.setCentralWidget(self.centralwidget)
 
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -48,6 +63,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Gönder"))
         self.label.setText(_translate("MainWindow", "TC"))
+
 
 
 if __name__ == "__main__":
