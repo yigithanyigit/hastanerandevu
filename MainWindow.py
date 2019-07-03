@@ -3,11 +3,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Register import RegisterUi
 from database.modules import query
+from AppointmentWindow import Ui_Randevu
 
 class Ui_MainWindow(object):
 
     def openWindow(self):
-        self.button = QtWidgets.QPushButton()
         self.var = self.lineEdit.text()
         self.window = QtWidgets.QMainWindow()
         self.ui = RegisterUi()
@@ -15,16 +15,14 @@ class Ui_MainWindow(object):
         # MainWindow.hide()
         self.window.show()
 
-    # @QtCore.pyqtSlot()
     def on_click(self):
-        if query(self.lineEdit.text()):
-            pass
+        if query(self.lineEdit.text()) == True:
+            self.Randevu = Ui_Randevu()
+            self.window = QtWidgets.QMainWindow()
+            self.Randevu.setupUi(self.window)
+            self.window.show()
         else:
             self.openWindow()
-
-    def id_return(self):
-        pass
-
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

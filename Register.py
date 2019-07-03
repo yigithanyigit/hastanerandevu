@@ -2,20 +2,24 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from database.modules import inserttable
-from PyQt5.QtCore import pyqtSlot
+from AppointmentWindow import Ui_Randevu
 
 class RegisterUi(object):
 
     def register(self):
         inserttable("patients", int(self.lineEdit.text()), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(),
                     self.comboBox.currentText())
+        self.Randevu = Ui_Randevu()
+        self.window = QtWidgets.QMainWindow()
+        self.Randevu.setupUi(self.window)
+        self.window.show()
+        # QtCore.QCoreApplication.instance().quit()
 
-    # @pyqtSlot()
     def on_click(self):
       self.register()
 
-    def setupUi(self, Register, id):
-        Register.setObjectName("OtherWindow")
+    def setupUi(self, Register, id=None):
+        Register.setObjectName("Register")
         Register.resize(289, 272)
         self.lineEdit = QtWidgets.QLineEdit(Register)
         self.lineEdit.setGeometry(QtCore.QRect(10, 40, 113, 23))
@@ -56,31 +60,32 @@ class RegisterUi(object):
 
 
         self.save.clicked.connect(self.on_click)
+        self.save.clicked.connect(Register.close)
 
         self.retranslateUi(Register, id)
         QtCore.QMetaObject.connectSlotsByName(Register)
 
     def retranslateUi(self, Register, id):
         _translate = QtCore.QCoreApplication.translate
-        Register.setWindowTitle(_translate("OtherWindow", "Form"))
-        self.lineEdit.setText(_translate("OtherWindow", id))
-        self.label.setText(_translate("OtherWindow", "TC"))
-        self.label_2.setText(_translate("OtherWindow", "AD"))
-        self.label_3.setText(_translate("OtherWindow", "SOYAD"))
-        self.label_4.setText(_translate("OtherWindow", "ANA ADI"))
-        self.label_5.setText(_translate("OtherWindow", "CİNSİYET"))
-        self.comboBox.setItemText(0, _translate("OtherWindow", "Erkek"))
-        self.comboBox.setItemText(1, _translate("OtherWindow", "Kadın"))
-        self.save.setText(_translate("OtherWindow", "Kaydet"))
+        Register.setWindowTitle(_translate("Register", "Form"))
+        self.lineEdit.setText(_translate("Register", id))
+        self.label.setText(_translate("Register", "TC"))
+        self.label_2.setText(_translate("Register", "AD"))
+        self.label_3.setText(_translate("Register", "SOYAD"))
+        self.label_4.setText(_translate("Register", "ANA ADI"))
+        self.label_5.setText(_translate("Register", "CİNSİYET"))
+        self.comboBox.setItemText(0, _translate("Register", "Erkek"))
+        self.comboBox.setItemText(1, _translate("Register", "Kadın"))
+        self.save.setText(_translate("Register", "Kaydet"))
 
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    OtherWindow = QtWidgets.QWidget()
+    Register = QtWidgets.QWidget()
     ui = RegisterUi()
-    ui.setupUi(OtherWindow)
-    OtherWindow.show()
+    ui.setupUi(Register)
+    Register.show()
     sys.exit(app.exec_())
 
