@@ -22,14 +22,25 @@ def inserttable(table,*args):
     mydb.commit()
     return print(cursor.rowcount, "Kayıt Girildi")
 
-def query(*args):
+def query(*args,sql=None, fetch=False):
+    """
+    :str sql:
+    :tuple args:
+    :return:
+    """
     mydb = database()
-    sql = "SELECT * FROM patients WHERE TC = %s"
+    print(sql)
+    if not sql:
+        sql = "SELECT * FROM patients WHERE TC = %s"
     cursor = mydb.cursor()
     cursor.execute(sql,args)
     result = cursor.fetchall()
     if result:
-        print("var")
-        return True
+        if not fetch:
+            print("var")
+            return True
+        else:
+            return result
     else:
        return print("yok")
+

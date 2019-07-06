@@ -2,14 +2,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from database.modules import inserttable
-from AppointmentWindow import Ui_Randevu
+from AppointmentWindow import Randevu_Ui
 
 class RegisterUi(object):
 
     def register(self):
         inserttable("patients", int(self.lineEdit.text()), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(),
                     self.comboBox.currentText())
-        self.Randevu = Ui_Randevu()
+        self.Randevu = Randevu_Ui()
         self.window = QtWidgets.QMainWindow()
         self.Randevu.setupUi(self.window)
         self.window.show()
@@ -67,7 +67,7 @@ class RegisterUi(object):
 
     def retranslateUi(self, Register, id):
         _translate = QtCore.QCoreApplication.translate
-        Register.setWindowTitle(_translate("Register", "Form"))
+        Register.setWindowTitle(_translate("Register", "Hastane Randevu Sistemi"))
         self.lineEdit.setText(_translate("Register", id))
         self.label.setText(_translate("Register", "TC"))
         self.label_2.setText(_translate("Register", "AD"))
