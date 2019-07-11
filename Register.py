@@ -7,6 +7,7 @@ from AppointmentWindow import Randevu_Ui
 class RegisterUi(object):
 
     def register(self):
+        id = self.lineEdit.text()
         name = self.lineEdit_2.text()
         srname = self.lineEdit_3.text()
         momname = self.lineEdit_4.text()
@@ -14,7 +15,7 @@ class RegisterUi(object):
                     self.comboBox.currentText(),table="patients" )
         self.Randevu = Randevu_Ui()
         self.window = QtWidgets.QMainWindow()
-        self.Randevu.setupUi(self.window, name, srname)
+        self.Randevu.setupUi(self.window, name, srname, id)
         self.window.show()
         # QtCore.QCoreApplication.instance().quit()
 
