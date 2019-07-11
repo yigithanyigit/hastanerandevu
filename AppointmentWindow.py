@@ -73,7 +73,7 @@ class Randevu_Ui(object):
         Doc_Name = self.comboBox_2.currentText()
         DocResult = query(Doc_Name, self.date ,sql=sqlDocDates, fetch=True)
         if DocResult:
-            self.drawTreeView(DocResult, self.date)
+            self.drawTreeView(DocResult, date=self.date)
             print(DocResult)
             a = list()
             for x in DocResult:
@@ -85,7 +85,7 @@ class Randevu_Ui(object):
             for i, elem in enumerate(result):
                 self.comboBox_3.insertItem(i, _translate("Randevu", elem[0]))
         else:
-            self.drawTreeView(DocResult, self.date)
+            self.drawTreeView(DocResult, date=self.date)
             while result:
                 self.comboBox_3.clear()
                 c = 0
@@ -96,17 +96,13 @@ class Randevu_Ui(object):
                 break
 
     def drawTreeView(self, result, date):
+        self.treeWidget.clear()
         self.calendarWidget.setMinimumDate(QtCore.QDate.currentDate())
         self.item = QtWidgets.QTreeWidgetItem()
-        try:
-            if len(result) < 34:
-                print("34 den küçük")
-                self.item = self.item.setText(0, date)
-                self.treeWidget.insertTopLevelItem(0, date)
-            else:
-                print("34 Esit")
-        except TypeError:
-            print("Deneme")
+        self.item = self.item.setText(1, date)
+        print(self.item)
+        self.treeWidget.insertTopLevelItem(0, self.item)
+
 
 
     def setupUi(self, Randevu, name, srname, id):
