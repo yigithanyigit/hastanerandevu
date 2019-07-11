@@ -15,14 +15,19 @@ class MainWindowUi(object):
         self.ui = RegisterUi()
         self.ui.setupUi(self.window, self.var)
         # MainWindow.hide()
+        self.lineEdit.clear()
         self.window.show()
 
     # Triggers openWindow
     def on_click(self):
         if query(self.lineEdit.text()) == True:
+            result = query(self.lineEdit.text(), fetch=True, sql=False)
+            for i in result:
+                result = i
             self.Randevu = Randevu_Ui()
             self.window = QtWidgets.QMainWindow()
-            self.Randevu.setupUi(self.window)
+            self.Randevu.setupUi(self.window, id=result[0], name=result[1], srname=result[2])
+            self.lineEdit.clear()
             self.window.show()
         else:
             self.openWindow()

@@ -14,22 +14,17 @@ def tablelist(*args, table):
             print(x)
 
 
-def inserttable(table,*args):
+def inserttable(*args, table=None, sql=None):
     mydb = database()
     cursor = mydb.cursor()
-    sql = "INSERT INTO {} (TC, AD, SOYAD, ANA_ADI, CINSIYET) VALUES (%s, %s, %s, %s, %s)".format(table)
+    if not sql:
+        sql = "INSERT INTO {} (TC, AD, SOYAD, ANA_ADI, CINSIYET) VALUES (%s, %s, %s, %s, %s)".format(table)
     cursor.execute(sql, args)
     mydb.commit()
     return print(cursor.rowcount, "Kayıt Girildi")
 
 def query(*args,sql=None, fetch=False):
-    """
-    :str sql:
-    :tuple args:
-    :return:
-    """
     mydb = database()
-    print(sql)
     if not sql:
         sql = "SELECT * FROM patients WHERE TC = %s"
     cursor = mydb.cursor()

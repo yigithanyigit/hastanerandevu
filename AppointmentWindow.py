@@ -2,7 +2,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from database.modules import query
+from database.modules import query, inserttable
 
 class Randevu_Ui(object):
 
@@ -15,15 +15,20 @@ class Randevu_Ui(object):
             strdate = "%s-0%s-%s" % (date[0], date[1], date[2])
         else:
             strdate = "%s-0%s-0%s" % (date[0], date[1], date[2])
-        result = query(strdate,sql=sqlDate, fetch=True)
+        result = query(strdate, sql=sqlDate, fetch=True)
         if result:
             for i in result:
                 print(i)
 
     def on_click(self):
-        _translate = QtCore.QCoreApplication.translate
-        date = self.calendarWidget.selectedDate().getDate()
-        self.get_dates(date)
+        table = "Appointments"
+        sql = "INSERT INTO {} (Hekim_Adı, Tarih, Saat, Department, TC) VALUES (%s, %s, %s, %s, %s)".format(table)
+        print(self.name, self.srname, self.id)
+        self.date = self.calendarWidget.selectedDate()
+        self.date = self.date.toString("yyyy-MM-dd")
+        inserttable(self.comboBox_2.currentText(), self.date, self.comboBox_3.currentText(), self.comboBox.currentText(), self.id,  sql=sql)
+        self.comboBoxDate()
+
 
     def comboBoxDepartments(self, translate):
         sqlDepartments = "SELECT * FROM Departments"
@@ -33,10 +38,11 @@ class Randevu_Ui(object):
             for i in result:
 
                 i = i[0]
-                print(c, i)
+                # print(c, i)
                 self.comboBox.insertItem(c, translate("Randevu", i))
                 c += 1
             self.comboBoxDocs()
+            self.comboBoxDate()
             break
 
     def comboBoxDocs(self):
@@ -46,23 +52,77 @@ class Randevu_Ui(object):
         c = self.comboBox.currentIndex()
         while result:
             a = 0
-            print(c)
+            # print(c)
             self.comboBox_2.clear()
             for i in result:
                 i = i[0]
-                print(a, i, c)
+                # print(a, i, c)
                 if a == c or a == c+1:
                     self.comboBox_2.insertItem(a, _translate("Randevu", i))
                 a += 1
             break
 
+    def comboBoxDate(self):
+        self.comboBox_3.clear()
+        self.date = self.calendarWidget.selectedDate()
+        self.date = self.date.toString("yyyy-MM-dd")
+        sqlDate = "SELECT * FROM Date_Time"
+        result = query(sql=sqlDate, fetch=True)
+        _translate = QtCore.QCoreApplication.translate
+        sqlDocDates = "SELECT * FROM Appointments WHERE (Hekim_Adı, Tarih) = (%s, %s)"
+        Doc_Name = self.comboBox_2.currentText()
+        DocResult = query(Doc_Name, self.date ,sql=sqlDocDates, fetch=True)
+        if DocResult:
+            self.drawTreeView(DocResult, self.date)
+            print(DocResult)
+            a = list()
+            for x in DocResult:
+                x = x[2]
+                x = (x,)
+                a.append(x)
+            for q in a:
+                result.remove(q)
+            for i, elem in enumerate(result):
+                self.comboBox_3.insertItem(i, _translate("Randevu", elem[0]))
+        else:
+            self.drawTreeView(DocResult, self.date)
+            while result:
+                self.comboBox_3.clear()
+                c = 0
+                for i in result:
+                    i = i[0]
+                    self.comboBox_3.insertItem(c, _translate("Randevu", i))
+                    c += 1
+                break
+
+    def drawTreeView(self, result, date):
+        self.calendarWidget.setMinimumDate(QtCore.QDate.currentDate())
+        self.item = QtWidgets.QTreeWidgetItem()
+        try:
+            if len(result) < 34:
+                print("34 den küçük")
+                self.item = self.item.setText(0, date)
+                self.treeWidget.insertTopLevelItem(0, date)
+            else:
+                print("34 Esit")
+        except TypeError:
+            print("Deneme")
 
 
-
-    def setupUi(self, Randevu):
+    def setupUi(self, Randevu, name, srname, id):
         Randevu.setObjectName("Randevu")
         Randevu.resize(565, 460)
         Randevu.setLocale(QtCore.QLocale(QtCore.QLocale.Turkish, QtCore.QLocale.Turkey))
+
+
+        # Center on Screen
+        resolution = QtWidgets.QDesktopWidget().screenGeometry()
+        Randevu.move((resolution.width() / 2) - (Randevu.frameSize().width() / 2),
+                        (resolution.height() / 2) - (Randevu.frameSize().height() / 2))
+
+        self.name = name
+        self.srname = srname
+        self.id = id
         self.label = QtWidgets.QLabel(Randevu)
         self.label.setGeometry(QtCore.QRect(40, 30, 91, 31))
         font = QtGui.QFont()
@@ -123,19 +183,23 @@ class Randevu_Ui(object):
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
 
-        self.retranslateUi(Randevu)
+
+        self.retranslateUi(Randevu, self.name, self.srname)
         # self.calendarWidget.clicked['QDate'].connect(self.comboBox.update)
-        self.calendarWidget.clicked['QDate'].connect(self.on_click)
+        self.calendarWidget.clicked['QDate'].connect(self.comboBoxDate)
         self.comboBox.currentIndexChanged.connect(self.comboBoxDocs)
+        self.comboBox_2.currentIndexChanged.connect(self.comboBoxDate)
+        self.pushButton.clicked.connect(self.on_click)
         QtCore.QMetaObject.connectSlotsByName(Randevu)
 
-    def retranslateUi(self, Randevu):
+    def retranslateUi(self, Randevu, name, srname):
         _translate = QtCore.QCoreApplication.translate
         Randevu.setWindowTitle(_translate("Randevu", "Hastane Randevu Sistemi"))
         self.comboBoxDepartments(_translate)
-        self.label.setText(_translate("Randevu", "TextLabel"))
-        self.label_2.setText(_translate("Randevu", "TextLabel"))
+        self.label.setText(_translate("Randevu", name))
+        self.label_2.setText(_translate("Randevu", srname))
         self.label_3.setText(_translate("Randevu", "Bölüm Seçin"))
+        # self.calendarWidget.setSelectedDate()
         self.pushButton.setText(_translate("Randevu", "Randevu Al"))
         self.treeWidget.headerItem().setText(0, _translate("Randevu", "En Erken Tarih"))
         self.label_4.setText(_translate("Randevu", "Hekim Seçin"))

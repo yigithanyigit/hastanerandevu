@@ -7,11 +7,14 @@ from AppointmentWindow import Randevu_Ui
 class RegisterUi(object):
 
     def register(self):
-        inserttable("patients", int(self.lineEdit.text()), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(),
-                    self.comboBox.currentText())
+        name = self.lineEdit_2.text()
+        srname = self.lineEdit_3.text()
+        momname = self.lineEdit_4.text()
+        inserttable(int(self.lineEdit.text()), name.capitalize() , srname.capitalize() , momname.capitalize(),
+                    self.comboBox.currentText(),table="patients" )
         self.Randevu = Randevu_Ui()
         self.window = QtWidgets.QMainWindow()
-        self.Randevu.setupUi(self.window)
+        self.Randevu.setupUi(self.window, name, srname)
         self.window.show()
         # QtCore.QCoreApplication.instance().quit()
 
@@ -21,6 +24,13 @@ class RegisterUi(object):
     def setupUi(self, Register, id=None):
         Register.setObjectName("Register")
         Register.resize(289, 272)
+
+        # Center on Screen
+        resolution = QtWidgets.QDesktopWidget().screenGeometry()
+        Register.move((resolution.width() / 2) - (Register.frameSize().width() / 2),
+                        (resolution.height() / 2) - (Register.frameSize().height() / 2))
+
+
         self.lineEdit = QtWidgets.QLineEdit(Register)
         self.lineEdit.setGeometry(QtCore.QRect(10, 40, 113, 23))
         self.lineEdit.setObjectName("lineEdit")
