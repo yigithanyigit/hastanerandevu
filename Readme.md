@@ -3,7 +3,7 @@ Python ve Qt ile oluşturulmuş basit randevu sistemi.
 
 ![MainWindow](shots/Screenshot%20from%202019-07-11%2019-25-05.png)
 
-![MainWindow](shots/Screenshot%20from%202019-07-11%2019-25-34.png)
+[MainWindow](shots/Screenshot%20from%202019-07-11%2019-25-34.png)
 
 ![MainWindow](shots/Screenshot%20from%202019-07-11%2019-28-19.png)
 
